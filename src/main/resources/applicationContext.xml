@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:elasticsearch="http://www.springframework.org/schema/data/elasticsearch"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/data/elasticsearch
+        http://www.springframework.org/schema/data/elasticsearch/spring-elasticsearch-1.0.xsd">
+
+
+    <!--创建一个elasticsearch client 指定集群名称，节点信息-->
+    <elasticsearch:transport-client id="esClient" cluster-name="my-elasticsearch" cluster-nodes="127.0.0.1:9301,127.0.0.1:9302,127.0.0.1:9303"/>
+
+    <!-- 配置dao包扫描器,用于创建代理对象，访问es -->
+    <elasticsearch:repositories base-package="com.pupu.es.repositories"/>
+
+    <!-- 简化es的增删改查等操作 -->
+    <bean id="elasticsearchTemplate" class="org.springframework.data.elasticsearch.core.ElasticsearchTemplate">
+        <!--需要配置es数据源 -->
+        <constructor-arg name="client" ref="esClient"/>
+    </bean>
+
+</beans>
+
+
